@@ -1,0 +1,77 @@
+package com.lotus.mp2.utils;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.lotus.mp2.exceptions.InvalidInputException;
+
+import static com.lotus.mp2.utils.Constants.EVENT_CODE_LENGTH;
+
+public class InputValidator {
+	
+	public static boolean isValidUsername(String username) throws InvalidInputException {
+		if(StringUtils.isBlank(username)) {
+			throw new InvalidInputException("Name cannot be empty");
+		}
+		
+		if(username.length() > 10) {
+			throw new InvalidInputException("Username cannod exceed 10 characters");
+		}
+		
+		if(username.contains(" ")) {
+			throw new InvalidInputException("Username cannot contain spaces");
+		}
+		
+		//TODO if exists
+		
+		return true;
+	}
+	
+	public static boolean isValidName(String name) throws InvalidInputException {
+		if(StringUtils.isBlank(name)) {
+			throw new InvalidInputException("Name cannot be empty");
+		}
+		
+		if(!StringUtils.isAlphaSpace(name)) {
+			throw new InvalidInputException("Name cannot contain numbers");
+		}
+		
+		if(hasWhitespaceAtEnds(name)) {
+			throw new InvalidInputException("Name cannot have whitespaces at start/end");
+		}
+		
+		return true;
+	}
+	
+	public static boolean hasWhitespaceAtEnds(String input) {
+		int FIRST = 0;
+		int LAST = input.length() - 1;
+		
+		if(input.charAt(FIRST) == ' ' || input.charAt(LAST) == ' ') {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public static boolean isValidPassword(String password) throws InvalidInputException {
+		if(StringUtils.isEmpty(password)) {
+			throw new InvalidInputException("Password cannot be empty");
+		}
+		
+		return true;
+	}
+	
+	public static boolean isValidEventCode(String eventCode) throws InvalidInputException {
+		if(eventCode.length() != EVENT_CODE_LENGTH) {
+			throw new InvalidInputException("Event code must be EXACTLY 5 characters long");
+		}
+		
+		if(eventCode.contains(" ")) {
+			throw new InvalidInputException("Event code cannot contain spaces");
+		}
+		
+		//TODO if exists
+		
+		return true;
+	}
+}
