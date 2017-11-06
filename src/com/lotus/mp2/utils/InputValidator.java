@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.lotus.mp2.exceptions.InvalidInputException;
 
-import static com.lotus.mp2.utils.Constants.EVENT_CODE_LENGTH;
+import static com.lotus.mp2.utils.Constants.*;
 
 public class InputValidator {
 	
@@ -13,7 +13,7 @@ public class InputValidator {
 			throw new InvalidInputException("Name cannot be empty");
 		}
 		
-		if(username.length() > 10) {
+		if(username.length() > USERNAME_MAX_LENGTH) {
 			throw new InvalidInputException("Username cannod exceed 10 characters");
 		}
 		
@@ -56,6 +56,12 @@ public class InputValidator {
 	public static boolean isValidPassword(String password) throws InvalidInputException {
 		if(StringUtils.isEmpty(password)) {
 			throw new InvalidInputException("Password cannot be empty");
+		}
+		
+		if(StringUtils.length(password) < PASSWORD_MIN_LENGTH || 
+				StringUtils.length(password) < PASSWORD_MAX_LENGTH) {
+			throw new InvalidInputException("Password must be 7 to 10 non- whitespace "
+					+ "characters in length");
 		}
 		
 		return true;
