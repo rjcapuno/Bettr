@@ -2,11 +2,21 @@ package com.lotus.mp2.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.lotus.mp2.dao.UserDAO;
+import com.lotus.mp2.event.EventInterface;
 import com.lotus.mp2.exceptions.InvalidInputException;
+import com.lotus.mp2.user.User;
 
 import static com.lotus.mp2.utils.Constants.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 public class InputValidator {
+	private static UserDAO userDAO = new UserDAO();
 	
 	public static boolean isValidUsername(String username) throws InvalidInputException {
 		if(StringUtils.isBlank(username)) {
@@ -21,7 +31,10 @@ public class InputValidator {
 			throw new InvalidInputException("Username cannot contain spaces");
 		}
 		
-		//TODO if exists
+		List<User> users = userDAO.getUserByUsername(username);
+		if(!users.isEmpty()) {
+			throw new InvalidInputException("Username already exists");
+		}
 		
 		return true;
 	}
@@ -68,6 +81,10 @@ public class InputValidator {
 	}
 	
 	public static boolean isValidEventCode(String eventCode) throws InvalidInputException {
+		if(StringUtils.isEmpty(eventCode)) {
+			throw new InvalidInputException("Event code cannot be empty");
+		}
+		
 		if(eventCode.length() != EVENT_CODE_LENGTH) {
 			throw new InvalidInputException("Event code must be EXACTLY 5 characters long");
 		}
@@ -76,7 +93,11 @@ public class InputValidator {
 			throw new InvalidInputException("Event code cannot contain spaces");
 		}
 		
-		//TODO if exists
+		List<EventInterface> events = userDAO.getEventByEventCode(eventCode);
+		
+		if(!events.isEmpty()) {
+			throw new InvalidInputException("Event code already exists");
+		}
 		
 		return true;
 	}
@@ -95,4 +116,71 @@ public class InputValidator {
 		return true;
 	}
 	
+	public static boolean isValidSport(String sport) throws InvalidInputException {
+		if(StringUtils.isEmpty(sport)) {
+			throw new InvalidInputException("Sport cannot be empty");
+		}
+		
+		for(Sport s : Sport.values()) {
+			if(sport.equalsIgnoreCase(s.toString())) {
+				return true;
+			}
+		}
+		
+		throw new InvalidInputException("Invalid sport");
+	}
+	
+	public static boolean isValidCompetitor(String competitor) throws InvalidInputException {
+		if(StringUtils.isBlank(competitor)) {
+			throw new InvalidInputException("Name cannot be empty");
+		}
+		
+		return true;
+	}
+	
+	public static boolean isValidDate(String eventDate) throws InvalidInputException {
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+		try {
+			Date date = dateFormat.parse(eventDate);
+			calendar.setTime(date);
+			
+			if(!isDateFuture(calendar)) {
+				throw new InvalidInputException("Event date should be in the future");
+			}
+			
+		} catch (ParseException e) {
+			throw new InvalidInputException("Invalid date format");
+		}
+		return true;
+	}
+	
+	public static boolean isDateFuture(Calendar calendar) throws InvalidInputException {
+		if(calendar.after(Calendar.getInstance())) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isValidWinner(String winner, String eventCode) throws InvalidInputException {
+		final int FIRST_INDEX = 0;
+		
+		if(StringUtils.isEmpty(winner)) {
+			throw new InvalidInputException("Winner cannot be empty");
+		}
+		
+		List<EventInterface> events = userDAO.getEventByEventCode(eventCode);
+		if(events.isEmpty()) {
+			throw new InvalidInputException("Event does not exist");
+		} 
+		
+		String competitor1 = events.get(FIRST_INDEX).getCompetitor1();
+		String competitor2 = events.get(FIRST_INDEX).getCompetitor2();
+		if(winner.equalsIgnoreCase(competitor1) || winner.equalsIgnoreCase(competitor2)) {
+			return true;
+		}
+		
+		throw new InvalidInputException("Invalid winner");
+	}
+
 }

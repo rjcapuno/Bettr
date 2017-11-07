@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.lotus.mp2.event.Event;
 import com.lotus.mp2.user.User;
 import com.lotus.mp2.utils.DAOUtils;
 
@@ -87,6 +88,37 @@ public class AdminDAO {
 				break;
 			}
 			
+			statement.executeUpdate();
+			connection.commit();
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
+	
+	public boolean addEvent(Event event) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		try {
+			connection = setUpConnection();
+			statement = connection.prepareStatement(ADD_EVENT_QUERY);
+			statement.setString	(1, event.getEventCode());
+			statement.setString	(2, event.getCategory().toString());
+			statement.setString	(3, event.getCompetitor1());
+			statement.setString	(4, event.getCompetitor2());
+			statement.setDate(5, new java.sql.Date (event.getEventDate().getTime()));
+			statement.setBoolean(6, event.isSettled());
+			statement.setString	(7, event.getWinner());
 			statement.executeUpdate();
 			connection.commit();
 			

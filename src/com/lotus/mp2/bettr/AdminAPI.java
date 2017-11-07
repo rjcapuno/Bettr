@@ -1,6 +1,9 @@
 package com.lotus.mp2.bettr;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,6 +25,8 @@ import com.lotus.mp2.user.admin.Admin;
 import com.lotus.mp2.user.customer.Customer;
 import com.lotus.mp2.utils.InputValidator;
 import com.lotus.mp2.utils.UserType;
+
+import oracle.jdbc.proxy.annotation.Post;
 
 
 @Path("api/admin")
@@ -61,7 +66,7 @@ public class AdminAPI {
 		return Response.status(200).entity(users.get(FIRST_INDEX)).build();
 	}
 	
-	@Path("create")
+	@Path("user")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -91,6 +96,17 @@ public class AdminAPI {
 		}
 		
 		return Response.status(200).entity(OK).build();
+	}
+	
+	@Path("event")
+	@Post
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response createEvent(@FormParam("eventcode") String eventcodeS, @FormParam("sport") String sport, @FormParam("competitor1") String competitor1, 
+			@FormParam("competitor2") String competitor2, @FormParam("eventdate") String eventdate, 
+			@FormParam("issettled") boolean issettled) {
+		
+		return null;
 	}
 	
 	
