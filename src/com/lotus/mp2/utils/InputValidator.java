@@ -59,7 +59,7 @@ public class InputValidator {
 		}
 		
 		if(StringUtils.length(password) < PASSWORD_MIN_LENGTH || 
-				StringUtils.length(password) < PASSWORD_MAX_LENGTH) {
+				StringUtils.length(password) > PASSWORD_MAX_LENGTH) {
 			throw new InvalidInputException("Password must be 7 to 10 non- whitespace "
 					+ "characters in length");
 		}
@@ -80,4 +80,19 @@ public class InputValidator {
 		
 		return true;
 	}
+	
+	public static boolean isValidUserType(String type) throws InvalidInputException {
+		if(StringUtils.isEmpty(type)) {
+			throw new InvalidInputException("User type cannot be empty");
+		}
+		
+		try {
+			UserType.valueOf(type.toUpperCase());
+		} catch(IllegalArgumentException e) {
+			throw new InvalidInputException("Invalid user type");
+		}
+		
+		return true;
+	}
+	
 }

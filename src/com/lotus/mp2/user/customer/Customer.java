@@ -2,29 +2,32 @@ package com.lotus.mp2.user.customer;
 
 import java.math.BigDecimal;
 
-import com.lotus.mp2.user.User;
+import com.lotus.mp2.utils.UserType;
 
-public class Customer implements User{
+public class Customer implements CustomerInterface{
 	private String username;
 	private String firstName;
 	private String lastName;
 	private String password;
+	private UserType userType;
 	private BigDecimal balance;
 	
 	public Customer(String username, String firstName, String lastName, String password,
-			BigDecimal balance) {
+			UserType userType, BigDecimal balance) {
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = password;
+		this.userType = userType;
 		this.balance = balance;
 	}
 
-	public
-	BigDecimal getBalance() {
+	@Override
+	public BigDecimal getBalance() {
 		return balance;
 	}
-
+	
+	@Override
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
@@ -47,6 +50,11 @@ public class Customer implements User{
 	@Override
 	public String getPassword() {
 		return password;
+	}
+
+	@Override
+	public UserType getType() {
+		return userType;
 	}
 	
 	

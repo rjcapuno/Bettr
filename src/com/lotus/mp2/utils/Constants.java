@@ -7,6 +7,6 @@ public final class Constants {
 	public static final int EVENT_CODE_LENGTH = 5;
 	public static final int USERNAME_MAX_LENGTH = 10;
 	public static final int PASSWORD_MIN_LENGTH = 7;
-	public static final int PASSWORD_MAX_LENGTH = 10;
-	
+	public static final int PASSWORD_MAX_LENGTH = 10;	
+	public static final int DEFAULT_BALANCE = 0;	
 }

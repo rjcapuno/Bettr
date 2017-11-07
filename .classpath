@@ -28,5 +28,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Ric Capuno/eclipse-workspace/bettr/lib/ojdbc6.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.0"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

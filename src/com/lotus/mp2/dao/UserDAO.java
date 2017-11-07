@@ -1,6 +1,5 @@
 package com.lotus.mp2.dao;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import static com.lotus.mp2.utils.Constants.*;
 import static com.lotus.mp2.utils.Queries.*;
@@ -9,19 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.lotus.mp2.user.User;
-import com.lotus.mp2.user.admin.Admin;
-import com.lotus.mp2.user.customer.Customer;
-import com.lotus.mp2.utils.UserType;
+import com.lotus.mp2.utils.DAOUtils;
+import com.sun.jersey.spi.resource.Singleton;
 
+@Singleton
 public class UserDAO implements UserDAOInterface{
-	private static UserDAO instance = null;
-
-	public static UserDAO getInstance() {
-		if (instance == null) {
-			instance = new UserDAO();
-		}
-		return instance;
-	}
 	
 	@Override
 	public Connection setUpConnection() throws SQLException {
@@ -50,7 +41,7 @@ public class UserDAO implements UserDAOInterface{
 			statement.setString	(1, username);
 			ResultSet result = statement.executeQuery();
 			result.next();
-			users.add(convertToUserObject(result));
+			users.add(DAOUtils.convertToUserObject(result));
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -65,22 +56,5 @@ public class UserDAO implements UserDAOInterface{
 		
 		return users;
 	}
-	
-	private User convertToUserObject(ResultSet result) throws SQLException {
-		String userType = result.getString("type");
-		String username = result.getString("username");
-		String firstName = result.getString("firstname");
-		String lastName = result.getString("lastname");
-		String password = result.getString("password");
-		BigDecimal balance = result.getBigDecimal("balance");
-		
-		User user = null;
-		if(userType.equalsIgnoreCase(UserType.ADMIN.toString())) {
-			user = new Admin(username, firstName, lastName, password);
-		} else {
-			user = new Customer(username, firstName, lastName, password, balance);
-		}
-		
-		return user;
-	}
+
 }
