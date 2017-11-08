@@ -9,7 +9,7 @@ import com.lotus.mp2.utils.Result;
 public interface BetInterface {
 	BigDecimal getStake();
 	String getEventCode();
-	String getOutcome();
+	String getpredicted();
 	Date getPlacementDate();
 	Result getResult();
 	void setResult(Result result);

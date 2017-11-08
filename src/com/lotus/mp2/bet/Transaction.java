@@ -9,9 +9,9 @@ public class Transaction extends Bet implements TransactionInterface{
 	private String transactionId;
 	private String username;
 	
-	public Transaction(BigDecimal stake, String eventCode, String outcome, Date placementDate,
+	public Transaction(BigDecimal stake, String eventCode, String predicted, Date placementDate,
 			String transactionId, String username, Result result) {
-		super(stake, eventCode, outcome, placementDate, result);
+		super(stake, eventCode, predicted, placementDate, result);
 		this.transactionId = transactionId;
 		this.username = username;
 	}

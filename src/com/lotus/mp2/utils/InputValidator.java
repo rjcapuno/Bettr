@@ -6,9 +6,11 @@ import com.lotus.mp2.dao.UserDAO;
 import com.lotus.mp2.event.EventInterface;
 import com.lotus.mp2.exceptions.InvalidInputException;
 import com.lotus.mp2.user.User;
+import com.lotus.mp2.user.customer.CustomerInterface;
 
 import static com.lotus.mp2.utils.Constants.*;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -93,10 +95,19 @@ public class InputValidator {
 			throw new InvalidInputException("Event code cannot contain spaces");
 		}
 		
+		if(doesEventCodeExists(eventCode)) {
+			throw new InvalidInputException("Event code already exists");
+		}
+		
+		return true;
+		
+	}
+	
+	public static boolean doesEventCodeExists(String eventCode) {
 		List<EventInterface> events = userDAO.getEventByEventCode(eventCode);
 		
-		if(!events.isEmpty()) {
-			throw new InvalidInputException("Event code already exists");
+		if(events.isEmpty()) {
+			return false;
 		}
 		
 		return true;
@@ -162,10 +173,10 @@ public class InputValidator {
 		return false;
 	}
 	
-	public static boolean isValidWinner(String winner, String eventCode) throws InvalidInputException {
+	public static boolean isValidPredicted(String predicted, String eventCode) throws InvalidInputException {
 		final int FIRST_INDEX = 0;
 		
-		if(StringUtils.isEmpty(winner)) {
+		if(StringUtils.isEmpty(predicted)) {
 			throw new InvalidInputException("Winner cannot be empty");
 		}
 		
@@ -176,11 +187,49 @@ public class InputValidator {
 		
 		String competitor1 = events.get(FIRST_INDEX).getCompetitor1();
 		String competitor2 = events.get(FIRST_INDEX).getCompetitor2();
-		if(winner.equalsIgnoreCase(competitor1) || winner.equalsIgnoreCase(competitor2)) {
+		if(predicted.equalsIgnoreCase(competitor1) || predicted.equalsIgnoreCase(competitor2)) {
 			return true;
 		}
 		
-		throw new InvalidInputException("Invalid winner");
+		throw new InvalidInputException("Invalid outcome");
+	}
+	
+	public static boolean isValidBetEventCode(String eventCode) throws InvalidInputException {
+		if(!doesEventCodeExists(eventCode)) {
+			throw new InvalidInputException("Event not found");
+		}
+		
+		return true;
 	}
 
+	public static boolean isValidBetStake(BigDecimal stake, String username) throws InvalidInputException{
+		final BigDecimal ZERO = new BigDecimal(0);
+		
+		if(stake.equals(null)) {
+			throw new InvalidInputException("Stake cannot be empty");
+		}
+		
+		if(stake.compareTo(ZERO) == 0) {
+			throw new InvalidInputException("Stake cannot be 0");
+		}
+		
+		if(stake.compareTo(MIN_STAKE) < 0 || stake.compareTo(MAX_STAKE) > 0) {
+			throw new InvalidInputException("Stake must be between 10 and 1000");
+		}
+		
+		List<User> users = userDAO.getUserByUsername(username);
+		if(users.isEmpty()) {
+			throw new InvalidInputException("Invalid username");
+		}
+		
+		CustomerInterface customer = (CustomerInterface) users.get(0);
+		BigDecimal balance = customer.getBalance();
+		
+		if(balance.subtract(stake).compareTo(ZERO) < 0) {
+			throw new InvalidInputException("Stake must be <= to balance");
+		}
+		
+		return true;
+
+	}
 }

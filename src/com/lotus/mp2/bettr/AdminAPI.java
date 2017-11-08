@@ -1,9 +1,7 @@
 package com.lotus.mp2.bettr;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import static com.lotus.mp2.utils.Constants.*;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -34,17 +32,9 @@ import com.lotus.mp2.utils.InputValidator;
 import com.lotus.mp2.utils.Sport;
 import com.lotus.mp2.utils.UserType;
 
-import oracle.jdbc.proxy.annotation.Post;
-
 
 @Path("api/admin")
 public class AdminAPI {
-	private static final String OK = "success: true";
-	private static final String FAIL = "success: false, error: ";
-	private static final String EMPTY = "{}";
-	private static final String FORBIDDEN = "forbidden";
-	
-	private static final boolean SUCCESS = true;
 	private static final int FIRST_INDEX = 0;
 	private static final long DEFAULT_ID = 0;
 	private static final boolean DEFAULT_IS_SETTLED = false;
@@ -113,7 +103,9 @@ public class AdminAPI {
 			InputValidator.isValidName(firstName);
 			InputValidator.isValidName(lastName);
 			InputValidator.isValidPassword(password);
-		} catch (InvalidInputException | AccessDeniedException e) {
+		} catch (AccessDeniedException e) {
+			return Response.status(400).entity(FORBIDDEN).build();
+		} catch (InvalidInputException e) {
 			return Response.status(400).entity(FAIL + e.getMessage()).build();
 		}
 		
@@ -151,7 +143,9 @@ public class AdminAPI {
 			
 			category = Sport.valueOf(sport);
 			date = DAOUtils.convertStringToDate(eventDate);
-		} catch (InvalidInputException | AccessDeniedException e) {
+		} catch (AccessDeniedException e) {
+			return Response.status(400).entity(FORBIDDEN).build();
+		} catch (InvalidInputException e) {
 			return Response.status(400).entity(FAIL + e.getMessage()).build();
 		}
 		
@@ -162,6 +156,20 @@ public class AdminAPI {
 		}
 		
 		return Response.status(200).entity(OK).build();
+	}
+	
+	@Path("event/{eventcode}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response getEventbyEventCode(@PathParam("eventcode") String eventCode) {
+		List<EventInterface> events = userDAO.getEventByEventCode(eventCode);
+		
+		if(events.isEmpty()) {
+			return Response.status(200).entity(Collections.EMPTY_LIST).build();
+		}
+		
+		return Response.status(200).entity(events).build();
 	}
 	
 	

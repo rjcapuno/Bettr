@@ -11,7 +11,6 @@ import com.sun.jersey.spi.resource.Singleton;
 @Singleton
 public class SessionManager {
 	static HttpSession session = null;
-	private static UserDAOImpl userDAOImpl = new UserDAOImpl();
 	
 	protected static void createSession(HttpServletRequest request, String username) throws InvalidInputException {
 		session = request.getSession(true);
@@ -21,6 +20,7 @@ public class SessionManager {
 		
 		session.setAttribute("username", username);
 		session.setAttribute("permission", permission);
+		session.setAttribute("userId", userId);
 	}
 	
 	protected static boolean hasPermission(HttpServletRequest request, String permission) throws AccessDeniedException {
@@ -43,6 +43,12 @@ public class SessionManager {
 			return false;
 		}
 		return true;
+	}
+	
+	protected static String getSessionUsername(HttpServletRequest request) {
+		session = request.getSession();
+		
+		return (String)session.getAttribute("username");
 	}
 	
 	

@@ -4,28 +4,18 @@ import static com.lotus.mp2.utils.Queries.*;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.lotus.mp2.event.Event;
 import com.lotus.mp2.event.EventInterface;
 import com.lotus.mp2.user.User;
 import com.lotus.mp2.utils.DAOUtils;
+import com.sun.jersey.spi.resource.Singleton;
 
 import static com.lotus.mp2.utils.Constants.*;
 
+@Singleton
 public class AdminDAO {
-	private static final String GET_ALL_USERS_QUERY = "SELECT * FROM users";
-	private static CustomerDAO instance = null;
-
-	public static CustomerDAO getInstance() {
-		if (instance == null) {
-			instance = new CustomerDAO();
-		}
-		return instance;
-	}
 	
 	private Connection setUpConnection() throws SQLException {
 		Connection connection = null;

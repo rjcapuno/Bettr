@@ -9,6 +9,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.lotus.mp2.bet.Transaction;
+import com.lotus.mp2.bet.TransactionInterface;
 import com.lotus.mp2.event.Event;
 import com.lotus.mp2.event.EventInterface;
 import com.lotus.mp2.exceptions.InvalidInputException;
@@ -41,10 +43,10 @@ public class DAOUtils {
 	
 	public static EventInterface convertToEventObject(ResultSet result) throws SQLException {
 		String eventCode = result.getString("eventcode");
-		Sport category = Sport.valueOf(result.getString("sport"));
+		Sport category = Sport.valueOf(result.getString("sport").toUpperCase());
 		String competitor1 = result.getString("competitor1");
 		String competitor2 = result.getString("competitor2");
-		Date eventDate = result.getDate("eventdate");
+		Date eventDate = result.getTimestamp("eventdate");
 		boolean isSettled = result.getBoolean("issettled");
 		String winner = result.getString("winner");
 		
@@ -65,6 +67,21 @@ public class DAOUtils {
 		}
 		
 		return date;
+	}
+	
+	public static TransactionInterface convertToTransactionObject(ResultSet result) throws SQLException {
+		String transactionId = result.getString("transactionId");
+		String username = result.getString("username");
+		String eventCode = result.getString("eventcode");
+		Date placementDate = result.getTimestamp("placementdate");
+		BigDecimal stake  = result.getBigDecimal("stake");
+		String predicted = result.getString("predected");
+		Result betResult = Result.valueOf(result.getString("result").toUpperCase());
+		
+		TransactionInterface transaction = new Transaction(stake, eventCode, predicted, placementDate, 
+				transactionId, username, betResult);
+		
+		return transaction;
 	}
 
 }

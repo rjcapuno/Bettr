@@ -8,14 +8,14 @@ import com.lotus.mp2.utils.Result;
 public class Bet implements BetInterface{
 	private BigDecimal stake;
 	private String eventCode;
-	private String outcome;
+	private String predicted;
 	private Date placementDate;
 	private Result result;
 	
-	public Bet(BigDecimal stake, String eventCode, String outcome, Date placementDate, Result result) {
+	public Bet(BigDecimal stake, String eventCode, String predicted, Date placementDate, Result result) {
 		this.stake = stake;
 		this.eventCode = eventCode;
-		this.outcome = outcome;
+		this.predicted = predicted;
 		this.placementDate = placementDate;
 		this.result = result;
 	}
@@ -31,8 +31,8 @@ public class Bet implements BetInterface{
 	}
 
 	@Override
-	public String getOutcome() {
-		return this.outcome;
+	public String getpredicted() {
+		return this.predicted;
 	}
 
 	@Override
