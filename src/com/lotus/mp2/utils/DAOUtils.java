@@ -18,6 +18,7 @@ import com.lotus.mp2.user.customer.Customer;
 
 public class DAOUtils {
 	public static User convertToUserObject(ResultSet result) throws SQLException {
+		long id = result.getLong("id");
 		UserType userType = UserType.valueOf(result.getString("type").toUpperCase());
 		String username = result.getString("username");
 		String firstName = result.getString("firstname");
@@ -28,10 +29,10 @@ public class DAOUtils {
 		User user = null;
 		
 		switch(userType) {
-		case ADMIN: user = new Admin(username, firstName, lastName, password, userType);
+		case ADMIN: user = new Admin(id, username, firstName, lastName, password, userType);
 			break;
 			
-		case CUSTOMER: user = new Customer(username, firstName, lastName, password, userType, balance);
+		case CUSTOMER: user = new Customer(id, username, firstName, lastName, password, userType, balance);
 			break;
 		}
 
@@ -65,4 +66,5 @@ public class DAOUtils {
 		
 		return date;
 	}
+
 }

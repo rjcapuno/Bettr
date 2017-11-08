@@ -4,10 +4,13 @@ import static com.lotus.mp2.utils.Queries.*;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.lotus.mp2.event.Event;
+import com.lotus.mp2.event.EventInterface;
 import com.lotus.mp2.user.User;
 import com.lotus.mp2.utils.DAOUtils;
 
@@ -105,7 +108,7 @@ public class AdminDAO {
 		return true;
 	}
 	
-	public boolean addEvent(Event event) {
+	public boolean addEvent(EventInterface event) {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		
@@ -116,7 +119,7 @@ public class AdminDAO {
 			statement.setString	(2, event.getCategory().toString());
 			statement.setString	(3, event.getCompetitor1());
 			statement.setString	(4, event.getCompetitor2());
-			statement.setDate(5, new java.sql.Date (event.getEventDate().getTime()));
+			statement.setTimestamp(5, new java.sql.Timestamp(event.getEventDate().getTime()));
 			statement.setBoolean(6, event.isSettled());
 			statement.setString	(7, event.getWinner());
 			statement.executeUpdate();

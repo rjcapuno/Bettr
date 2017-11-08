@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.lotus.mp2.utils.UserType;
 
 public class Customer implements CustomerInterface{
+	private Long id;
 	private String username;
 	private String firstName;
 	private String lastName;
@@ -12,8 +13,9 @@ public class Customer implements CustomerInterface{
 	private UserType userType;
 	private BigDecimal balance;
 	
-	public Customer(String username, String firstName, String lastName, String password,
+	public Customer(Long id, String username, String firstName, String lastName, String password,
 			UserType userType, BigDecimal balance) {
+		this.id = id;
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -30,6 +32,11 @@ public class Customer implements CustomerInterface{
 	@Override
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
+	}
+	
+	@Override
+	public Long getId() {
+		return id;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.lotus.mp2.exceptions.InvalidInputException;
 import com.lotus.mp2.user.User;
+import com.lotus.mp2.utils.UserType;
 
 public class UserDAOImpl {
 	private static final int FIRST_INDEX = 0;
@@ -22,5 +23,25 @@ public class UserDAOImpl {
 		}
 		
 		return true;
+	}
+	
+	public static UserType getUserType(String username) throws InvalidInputException {
+		List<User> users = userDAO.getUserByUsername(username);
+		
+		if(users.isEmpty()) {
+			throw new InvalidInputException("User not found");
+		}
+		
+		return users.get(FIRST_INDEX).getType();
+	}
+	
+	public static Long getUserId(String username ) throws InvalidInputException{
+		List<User> users = userDAO.getUserByUsername(username);
+		
+		if(users.isEmpty()) {
+			throw new InvalidInputException("User not found");
+		}
+		
+		return users.get(FIRST_INDEX).getId();
 	}
 }

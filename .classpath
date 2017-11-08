@@ -7,12 +7,13 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="var" path="M2_REPO/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/javax/servlet/javax.servlet-api/3.0.1/javax.servlet-api-3.0.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.0/commons-lang3-3.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.0/commons-lang3-3.0.jar" sourcepath="M2_REPO/org/apache/commons/commons-lang3/3.0/commons-lang3-3.0-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/asm/asm/3.3.1/asm-3.3.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-bundle/1.19/jersey-bundle-1.19.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/json/json/20140107/json-20140107.jar"/>
@@ -21,13 +22,13 @@
 	<classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-mapper-asl/1.8.5/jackson-mapper-asl-1.8.5.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.8.5/jackson-core-asl-1.8.5.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/owlike/genson/0.99/genson-0.99.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/oracle/ojdbc/6/ojdbc-6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Ric Capuno/eclipse-workspace/bettr/lib/ojdbc6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.0"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

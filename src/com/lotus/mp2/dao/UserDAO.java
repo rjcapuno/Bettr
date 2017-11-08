@@ -70,8 +70,9 @@ public class UserDAO implements UserDAOInterface{
 			eventCode = eventCode.toLowerCase();
 			statement.setString	(1, eventCode);
 			ResultSet result = statement.executeQuery();
-			result.next();
-			events.add(DAOUtils.convertToEventObject(result));
+			if(result.next()) {
+				events.add(DAOUtils.convertToEventObject(result));
+			}
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
