@@ -1,6 +1,8 @@
 package com.lotus.mp2.bettr;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import static com.lotus.mp2.utils.Constants.*;
 import java.util.Collections;
 import java.util.Date;
@@ -18,6 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.lotus.mp2.bet.TransactionInterface;
 import com.lotus.mp2.dao.AdminDAO;
 import com.lotus.mp2.dao.UserDAO;
 import com.lotus.mp2.event.Event;
@@ -27,16 +30,15 @@ import com.lotus.mp2.exceptions.InvalidInputException;
 import com.lotus.mp2.user.User;
 import com.lotus.mp2.user.admin.Admin;
 import com.lotus.mp2.user.customer.Customer;
+import com.lotus.mp2.user.customer.CustomerInterface;
 import com.lotus.mp2.utils.DAOUtils;
 import com.lotus.mp2.utils.InputValidator;
-import com.lotus.mp2.utils.Sport;
+import com.lotus.mp2.utils.Sports;
 import com.lotus.mp2.utils.UserType;
 
 
 @Path("api/admin")
 public class AdminAPI {
-	private static final int FIRST_INDEX = 0;
-	private static final long DEFAULT_ID = 0;
 	private static final boolean DEFAULT_IS_SETTLED = false;
 	private static final String DEFAULT_WINNER = null;
 	
@@ -129,7 +131,7 @@ public class AdminAPI {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response createEvent(@FormParam("eventcode") String eventCode, @FormParam("sport") String sport, @FormParam("competitor1") String competitor1, 
 			@FormParam("competitor2") String competitor2, @FormParam("eventdate") String eventDate) {
-		Sport category = null;
+		Sports category = null;
 		Date date = null;
 		
 		sport = sport.toUpperCase();
@@ -141,7 +143,7 @@ public class AdminAPI {
 			InputValidator.isValidCompetitor(competitor2);
 			InputValidator.isValidDate(eventDate);
 			
-			category = Sport.valueOf(sport);
+			category = Sports.valueOf(sport);
 			date = DAOUtils.convertStringToDate(eventDate);
 		} catch (AccessDeniedException e) {
 			return Response.status(400).entity(FORBIDDEN).build();
@@ -149,7 +151,7 @@ public class AdminAPI {
 			return Response.status(400).entity(FAIL + e.getMessage()).build();
 		}
 		
-		EventInterface event = new Event(eventCode, category, competitor1, competitor2, date, DEFAULT_IS_SETTLED, DEFAULT_WINNER);
+		EventInterface event = new Event(DEFAULT_ID, eventCode, category, competitor1, competitor2, date, DEFAULT_IS_SETTLED, DEFAULT_WINNER);
 		
 		if(adminDAO.addEvent(event) != SUCCESS) {
 			return Response.status(400).entity(FAIL).build();
@@ -158,11 +160,39 @@ public class AdminAPI {
 		return Response.status(200).entity(OK).build();
 	}
 	
+	@Path("event")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response getAllEvents() {
+		
+		try {
+			SessionManager.hasPermission(request, PERMISSION);
+		} catch (AccessDeniedException e) {
+			return Response.status(403).entity(FORBIDDEN).build();
+		}
+		
+		List<EventInterface> events = userDAO.getAllEvents();
+		
+		if(events.isEmpty()) {
+			return Response.status(200).entity(Collections.EMPTY_LIST).build();
+		}
+		
+		return Response.status(200).entity(events).build();
+	}
+	
 	@Path("event/{eventcode}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response getEventbyEventCode(@PathParam("eventcode") String eventCode) {
+		
+		try {
+			SessionManager.hasPermission(request, PERMISSION);
+		} catch (AccessDeniedException e) {
+			return Response.status(403).entity(FORBIDDEN).build();
+		}
+		
 		List<EventInterface> events = userDAO.getEventByEventCode(eventCode);
 		
 		if(events.isEmpty()) {
@@ -172,5 +202,147 @@ public class AdminAPI {
 		return Response.status(200).entity(events).build();
 	}
 	
+	@Path("bet")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response getAllTransactions() {
+		
+		try {
+			SessionManager.hasPermission(request, PERMISSION);
+		} catch (AccessDeniedException e) {
+			return Response.status(403).entity(FORBIDDEN).build();
+		}
+		
+		List<TransactionInterface> transactions = adminDAO.getBetList();
+		
+		if(transactions.isEmpty()) {
+			return Response.status(200).entity(Collections.EMPTY_LIST).build();
+		}
+		
+		return Response.status(200).entity(transactions).build();
+	}
 	
+	@Path("bet/{filter}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response getTransactionByEventCode(@PathParam("filter") String filter) {
+		
+		try {
+			SessionManager.hasPermission(request, PERMISSION);
+		} catch (AccessDeniedException e) {
+			return Response.status(403).entity(FORBIDDEN).build();
+		}
+		
+		List<TransactionInterface> transactions = Collections.emptyList();
+		
+		List<User> users = userDAO.getUserByUsername(filter);
+		if(!users.isEmpty()) {
+			transactions = adminDAO.getBetbyCustomerId(users.get(FIRST_INDEX).getId());
+		}
+		
+		List<EventInterface> events = userDAO.getEventByEventCode(filter);
+		if(!events.isEmpty()) {
+			transactions = adminDAO.getBetbyEventId(events.get(FIRST_INDEX).getId());
+		}
+		
+		if(transactions.isEmpty()) {
+			return Response.status(200).entity(Collections.EMPTY_LIST).build();
+		}
+		
+		return Response.status(200).entity(transactions).build();
+	}
+	
+	@Path("outcome/result")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response setResult(@FormParam("outcome") String outcome,	@FormParam("eventcode") String eventCode) {
+		
+		try {
+			SessionManager.hasPermission(request, PERMISSION);
+			InputValidator.isNotNull(outcome);
+			InputValidator.isNotNull(eventCode);
+			InputValidator.doesEventCodeExists(eventCode);
+			InputValidator.isValidPredicted(outcome, eventCode);
+		} catch (AccessDeniedException e) {
+			return Response.status(400).entity(FORBIDDEN).build();
+		} catch (InvalidInputException e) {
+			return Response.status(400).entity(FAIL + e.getMessage()).build();
+		}
+		
+		List<EventInterface> events = userDAO.getEventByEventCode(eventCode);
+
+		if(events.isEmpty()) {
+			return Response.status(400).entity(FAIL).build();
+		}
+		
+		EventInterface event = events.get(FIRST_INDEX);
+		if(!(event.getWinner() == null)) {
+			return Response.status(400).entity(FAIL + "can set result only once").build();
+		}
+		
+		if(adminDAO.updateResult(outcome, eventCode) != SUCCESS) {
+			return Response.status(400).entity(FAIL).build();
+		}
+		
+		return Response.status(200).entity(OK).build();
+	}
+	
+	@Path("outcome/result/{eventcode}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getResult(@PathParam("eventcode") String eventCode) {
+		
+		try {
+			SessionManager.hasPermission(request, PERMISSION);
+			InputValidator.isNotNull(eventCode);
+			InputValidator.doesEventCodeExists(eventCode);
+		} catch (AccessDeniedException e) {
+			return Response.status(400).entity(FORBIDDEN).build();
+		} catch (InvalidInputException e) {
+			return Response.status(400).entity(FAIL + e.getMessage()).build();
+		}
+		
+		List<EventInterface> events = userDAO.getEventByEventCode(eventCode);
+
+		if(events.isEmpty()) {
+			return Response.status(400).entity(FAIL).build();
+		}
+		
+		EventInterface event = events.get(FIRST_INDEX);
+		if(event.getWinner() == null) {
+			return Response.status(200).entity("No result yet").build();
+		}
+		return Response.status(200).entity(event.getWinner()).build();
+	}
+	
+	@Path("user/addBalance")
+	@POST
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response setResult(@FormParam("username") String username, @FormParam("amount") BigDecimal amount) {
+		
+		amount = amount.setScale(2, RoundingMode.DOWN);
+		
+		try {
+			SessionManager.hasPermission(request, PERMISSION);
+			InputValidator.isValidAmount(amount, username);
+		} catch (AccessDeniedException e) {
+			return Response.status(400).entity(FORBIDDEN).build();
+		} catch (InvalidInputException e) {
+			return Response.status(400).entity(FAIL + e.getMessage()).build();
+		}
+		
+		List<User> users = userDAO.getUserByUsername(username);
+		CustomerInterface customer = (CustomerInterface) users.get(FIRST_INDEX);
+		
+		BigDecimal newBalance = customer.getBalance().add(amount);
+		
+		if(adminDAO.updateBalance(newBalance, username) != SUCCESS) {
+			return Response.status(400).entity(FAIL).build();
+		}
+		
+		return Response.status(200).entity(OK).build();
+	}
 }

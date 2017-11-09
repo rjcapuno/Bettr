@@ -19,6 +19,7 @@ import java.util.List;
 
 public class InputValidator {
 	private static UserDAO userDAO = new UserDAO();
+	private final static BigDecimal ZERO = new BigDecimal(0);
 	
 	public static boolean isValidUsername(String username) throws InvalidInputException {
 		if(StringUtils.isBlank(username)) {
@@ -132,13 +133,27 @@ public class InputValidator {
 			throw new InvalidInputException("Sport cannot be empty");
 		}
 		
-		for(Sport s : Sport.values()) {
+		for(Sports s : Sports.values()) {
 			if(sport.equalsIgnoreCase(s.toString())) {
 				return true;
 			}
 		}
 		
 		throw new InvalidInputException("Invalid sport");
+	}
+	
+	public static boolean isValidSportCode(String sportCode) throws InvalidInputException {
+		if(StringUtils.isEmpty(sportCode)) {
+			throw new InvalidInputException("Sport code cannot be empty");
+		}
+		
+		for(Sports s : Sports.values()) {
+			if(sportCode.equalsIgnoreCase(s.getCode().toString())) {
+				return true;
+			}
+		}
+		
+		throw new InvalidInputException("Invalid sport code");
 	}
 	
 	public static boolean isValidCompetitor(String competitor) throws InvalidInputException {
@@ -203,7 +218,6 @@ public class InputValidator {
 	}
 
 	public static boolean isValidBetStake(BigDecimal stake, String username) throws InvalidInputException{
-		final BigDecimal ZERO = new BigDecimal(0);
 		
 		if(stake.equals(null)) {
 			throw new InvalidInputException("Stake cannot be empty");
@@ -232,4 +246,40 @@ public class InputValidator {
 		return true;
 
 	}
+	
+	public static boolean isValidResult(String result) throws InvalidInputException {
+		try {
+			Result.valueOf(result.toUpperCase());
+		} catch(IllegalArgumentException e) {
+			throw new InvalidInputException("Invalid result");
+		}
+		
+		return true;
+	}
+	
+	public static boolean isNotNull(String input) throws InvalidInputException {
+		if(StringUtils.isEmpty(input)) {
+			throw new InvalidInputException("Cannot be empty");
+		}
+		
+		return true;
+	}
+	
+	public static boolean isValidAmount(BigDecimal amount, String username) throws InvalidInputException {
+		if(amount.compareTo(ZERO) == 0) {
+			throw new InvalidInputException("Invalid amount");
+		}
+		
+		List<User> users = userDAO.getUserByUsername(username);
+		CustomerInterface customer = (CustomerInterface) users.get(FIRST_INDEX);
+		BigDecimal balance = customer.getBalance();
+		BigDecimal newBalance = balance.add(amount);
+		
+		if(newBalance.compareTo(ZERO) < 0) {
+			throw new InvalidInputException("Balance cannot go below 0");
+		}
+		
+		return true;
+	}
+
 }

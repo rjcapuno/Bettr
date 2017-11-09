@@ -1,11 +1,11 @@
 package com.lotus.mp2.utils;
 
-public enum Sport {
+public enum Sports {
 	FOOTBALL("FOOT"), BASKETBALL("BASK"), TENNIS("TENN"), BOXING("BOXI");
 	
 	private final String code;
 
-	Sport(String code) {
+	Sports(String code) {
 		this.code = code;
 	}
 	

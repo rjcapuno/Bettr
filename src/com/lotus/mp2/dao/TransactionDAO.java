@@ -43,8 +43,36 @@ public class TransactionDAO implements TransactionDAOInterface{
 			transactionId = transactionId.toLowerCase();
 			statement.setString	(1, transactionId);
 			ResultSet result = statement.executeQuery();
-			result.next();
-			transactions.add(DAOUtils.convertToTransactionObject(result));
+			if(result.next()) {
+				transactions.add(DAOUtils.convertToTransactionObject(result));
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return transactions;
+	}
+	
+	public List<TransactionInterface> getAlltTransactions() {
+		List<TransactionInterface> transactions = new LinkedList<>();
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		try {
+			connection = setUpConnection();
+			statement = connection.prepareStatement(GET_TRANSACTION_BY_ID_QUERY);
+			ResultSet result = statement.executeQuery();
+			if(result.next()) {
+				transactions.add(DAOUtils.convertToTransactionObject(result));
+			}
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -68,8 +96,8 @@ public class TransactionDAO implements TransactionDAOInterface{
 			connection = setUpConnection();
 			statement = connection.prepareStatement(ADD_TRANSACTION_QUERY);
 			statement.setString	(1, transaction.getTransactionId());
-			statement.setString	(2, transaction.getUsername());
-			statement.setString	(3, transaction.getEventCode());
+			statement.setLong(2, transaction.getCustomerId());
+			statement.setLong(3, transaction.getEventId());
 			statement.setTimestamp(4, new java.sql.Timestamp(transaction.getPlacementDate().getTime()));
 			statement.setBigDecimal(5, transaction.getStake());
 			statement.setString(6, transaction.getpredicted());

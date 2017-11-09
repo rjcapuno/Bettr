@@ -5,15 +5,46 @@ import java.util.Date;
 
 import com.lotus.mp2.utils.Result;
 
-public class Transaction extends Bet implements TransactionInterface{
+public class Transaction implements TransactionInterface{
+	private long id;
+	private BigDecimal stake;
+	private long eventId;
+	private String predicted;
 	private String transactionId;
-	private String username;
+	private long customerId;
+	private Date placementDate;
+	private Result result;
 	
-	public Transaction(BigDecimal stake, String eventCode, String predicted, Date placementDate,
-			String transactionId, String username, Result result) {
-		super(stake, eventCode, predicted, placementDate, result);
+	public Transaction(long id, BigDecimal stake, long eventId, String predicted, Date placementDate,
+			String transactionId, long customerId, Result result) {
+		this.id = id;
+		this.stake = stake;
+		this.eventId = eventId;
+		this.predicted = predicted;
 		this.transactionId = transactionId;
-		this.username = username;
+		this.customerId = customerId;
+		this.placementDate = placementDate;
+		this.result = result;
+	}
+	
+	@Override
+	public long getId() {
+		return this.id;
+	}
+	
+	@Override
+	public BigDecimal getStake() {
+		return this.stake;
+	}
+
+	@Override
+	public long getEventId() {
+		return this.eventId;
+	}
+
+	@Override
+	public String getpredicted() {
+		return this.predicted;
 	}
 	
 	@Override
@@ -21,7 +52,22 @@ public class Transaction extends Bet implements TransactionInterface{
 		return transactionId;
 	}
 	@Override
-	public String getUsername() {
-		return username;
+	public long getCustomerId() {
+		return customerId;
+	}
+	
+	@Override
+	public Date getPlacementDate() {
+		return this.placementDate;
+	}
+
+	@Override
+	public Result getResult() { 
+		return this.result;
+	}
+
+	@Override
+	public void setResult(Result result) {
+		this.result = result;
 	}
 }

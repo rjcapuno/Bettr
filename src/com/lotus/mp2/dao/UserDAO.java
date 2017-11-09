@@ -42,8 +42,38 @@ public class UserDAO implements UserDAOInterface{
 			username = username.toLowerCase();
 			statement.setString	(1, username);
 			ResultSet result = statement.executeQuery();
-			result.next();
-			users.add(DAOUtils.convertToUserObject(result));
+			if(result.next()) {
+				users.add(DAOUtils.convertToUserObject(result));
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return users;
+	}
+	
+	@Override
+	public List<User> getUserByCustomerId(long customerId) {
+		List<User> users = new LinkedList<>();
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		try {
+			connection = setUpConnection();
+			statement = connection.prepareStatement(GET_USER_BY_CUSTOMER_ID_QUERY);
+			statement.setLong(1, customerId);
+			ResultSet result = statement.executeQuery();
+			if(result.next()) {
+				users.add(DAOUtils.convertToUserObject(result));
+			}
 			
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -87,5 +117,61 @@ public class UserDAO implements UserDAOInterface{
 		
 		return events;
 	}
+	
+	public List<EventInterface> getEventByEventId(long eventId) {
+		List<EventInterface> events = new LinkedList<>();
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		try {
+			connection = setUpConnection();
+			statement = connection.prepareStatement(GET_EVENT_BY_EVENT_ID_QUERY);
+			statement.setLong	(1, eventId);
+			ResultSet result = statement.executeQuery();
+			if(result.next()) {
+				events.add(DAOUtils.convertToEventObject(result));
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return events;
+	}
+	
+	public List<EventInterface> getAllEvents() {
+		List<EventInterface> events = new LinkedList<>();
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		try {
+			connection = setUpConnection();
+			statement = connection.prepareStatement(GET_ALL_EVENTS_QUERY);
+			ResultSet result = statement.executeQuery();
+			while(result.next()) {
+				events.add(DAOUtils.convertToEventObject(result));
+			}
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return events;
+	}
+	
 
 }

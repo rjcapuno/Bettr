@@ -45,6 +45,12 @@ public class SessionManager {
 		return true;
 	}
 	
+	protected static String getSessionUserId(HttpServletRequest request) {
+		session = request.getSession();
+		
+		return (String)session.getAttribute("userId");
+	}
+	
 	protected static String getSessionUsername(HttpServletRequest request) {
 		session = request.getSession();
 		

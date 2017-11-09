@@ -7,10 +7,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import com.lotus.mp2.bet.Bet;
+import com.lotus.mp2.bet.BetInterface;
 import com.lotus.mp2.bet.Transaction;
 import com.lotus.mp2.bet.TransactionInterface;
+import com.lotus.mp2.dao.UserDAO;
+import com.lotus.mp2.dao.UserDAOInterface;
 import com.lotus.mp2.event.Event;
 import com.lotus.mp2.event.EventInterface;
 import com.lotus.mp2.exceptions.InvalidInputException;
@@ -19,6 +25,8 @@ import com.lotus.mp2.user.admin.Admin;
 import com.lotus.mp2.user.customer.Customer;
 
 public class DAOUtils {
+	static UserDAOInterface userDAO = new UserDAO();
+	
 	public static User convertToUserObject(ResultSet result) throws SQLException {
 		long id = result.getLong("id");
 		UserType userType = UserType.valueOf(result.getString("type").toUpperCase());
@@ -42,18 +50,39 @@ public class DAOUtils {
 	}
 	
 	public static EventInterface convertToEventObject(ResultSet result) throws SQLException {
+		Calendar calendar = Calendar.getInstance();
+		
+		long id = result.getLong("id");
 		String eventCode = result.getString("eventcode");
-		Sport category = Sport.valueOf(result.getString("sport").toUpperCase());
+		Sports category = Sports.valueOf(result.getString("sport").toUpperCase());
 		String competitor1 = result.getString("competitor1");
 		String competitor2 = result.getString("competitor2");
-		Date eventDate = result.getTimestamp("eventdate");
+		calendar.setTimeInMillis(result.getTimestamp("eventdate").getTime());
 		boolean isSettled = result.getBoolean("issettled");
 		String winner = result.getString("winner");
 		
-		EventInterface event = new Event(eventCode, category, competitor1,
-		 competitor2, eventDate, isSettled, winner);
+		EventInterface event = new Event(id, eventCode, category, competitor1,
+		 competitor2, calendar.getTime(), isSettled, winner);
 		
 		return event;
+	}
+	
+	public static TransactionInterface convertToTransactionObject1(ResultSet result) throws SQLException {
+		Calendar calendar = Calendar.getInstance();
+		
+		long id = result.getLong("id");
+		long eventId = result.getLong("eventid");
+		long customerId = result.getLong("customerid");
+		BigDecimal stake = result.getBigDecimal("stake");
+		String predicted  = result.getString("predicted");
+		String transactionId = result.getString("transactionid");
+		Result betResult = Result.valueOf(result.getString("result").toUpperCase());
+		calendar.setTimeInMillis(result.getTimestamp("placementdate").getTime());
+		
+		TransactionInterface transaction = new Transaction(id, stake, eventId, predicted, calendar.getTime(),
+				transactionId, customerId, betResult);
+		
+		return transaction;
 	}
 	
 	public static Date convertStringToDate(String stringDate) throws InvalidInputException {
@@ -70,18 +99,34 @@ public class DAOUtils {
 	}
 	
 	public static TransactionInterface convertToTransactionObject(ResultSet result) throws SQLException {
+		long id = result.getLong("id");
 		String transactionId = result.getString("transactionId");
-		String username = result.getString("username");
-		String eventCode = result.getString("eventcode");
+		long customerId = result.getLong("customerId");
+		long eventId = result.getLong("eventid");
 		Date placementDate = result.getTimestamp("placementdate");
 		BigDecimal stake  = result.getBigDecimal("stake");
-		String predicted = result.getString("predected");
+		String predicted = result.getString("predicted");
 		Result betResult = Result.valueOf(result.getString("result").toUpperCase());
 		
-		TransactionInterface transaction = new Transaction(stake, eventCode, predicted, placementDate, 
-				transactionId, username, betResult);
+		TransactionInterface transaction = new Transaction(id, stake, eventId, predicted, placementDate, 
+				transactionId, customerId, betResult);
 		
 		return transaction;
+	}
+	
+	public static BetInterface convertToBetObject(ResultSet result) throws SQLException {
+		long id = result.getLong("id");
+		long eventId = result.getLong("eventid");
+		Date placementDate = result.getTimestamp("placementdate");
+		BigDecimal stake  = result.getBigDecimal("stake");
+		String predicted = result.getString("predicted");
+		Result betResult = Result.valueOf(result.getString("result").toUpperCase());
+		
+		List<EventInterface> events = userDAO.getEventByEventId(eventId);
+		
+		BetInterface bet = new Bet(id, stake, events.get(0).getEventCode(), predicted, placementDate, betResult);
+		
+		return bet;
 	}
 
 }

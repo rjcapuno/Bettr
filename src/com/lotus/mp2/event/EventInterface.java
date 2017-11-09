@@ -2,9 +2,11 @@ package com.lotus.mp2.event;
 
 import java.util.Date;
 
-import com.lotus.mp2.utils.Sport;
+import com.lotus.mp2.utils.Sports;
 
 public interface EventInterface {
+	public long getId();
+	
 	boolean isSettled();
 
 	void setSettled(boolean isSettled);
@@ -15,7 +17,7 @@ public interface EventInterface {
 
 	String getEventCode();
 
-	Sport getCategory();
+	Sports getCategory();
 
 	String getCompetitor1();
 

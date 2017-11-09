@@ -6,18 +6,24 @@ import java.util.Date;
 import com.lotus.mp2.utils.Result;
 
 public class Bet implements BetInterface{
+	private long id;
 	private BigDecimal stake;
 	private String eventCode;
 	private String predicted;
 	private Date placementDate;
-	private Result result;
+	private Result betResult;
 	
-	public Bet(BigDecimal stake, String eventCode, String predicted, Date placementDate, Result result) {
+	public Bet(long id, BigDecimal stake, String eventCode, String predicted, Date placementDate, Result betResult) {
 		this.stake = stake;
 		this.eventCode = eventCode;
 		this.predicted = predicted;
 		this.placementDate = placementDate;
-		this.result = result;
+		this.betResult = betResult;
+	}
+	
+	@Override
+	public long getId() {
+		return this.id;
 	}
 	
 	@Override
@@ -34,20 +40,14 @@ public class Bet implements BetInterface{
 	public String getpredicted() {
 		return this.predicted;
 	}
-
+	
 	@Override
 	public Date getPlacementDate() {
 		return this.placementDate;
 	}
-
-	@Override
-	public Result getResult() { 
-		return this.result;
-	}
-
-	@Override
-	public void setResult(Result result) {
-		this.result = result;
-	}
 	
+	@Override
+	public Result getBetResult() {
+		return this.betResult;
+	}
 }

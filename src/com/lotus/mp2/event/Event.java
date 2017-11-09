@@ -2,20 +2,22 @@ package com.lotus.mp2.event;
 
 import java.util.Date;
 
-import com.lotus.mp2.utils.Sport;
+import com.lotus.mp2.utils.Sports;
 
 
 public class Event implements EventInterface{
+	private long id;
 	private String eventCode;
-	private Sport category;
+	private Sports category;
 	private String competitor1;
 	private String competitor2;
 	private boolean isSettled;
 	private Date eventDate;
 	private String winner;
 	
-	public Event(String eventCode, Sport category, String competitor1,
+	public Event(long id, String eventCode, Sports category, String competitor1,
 			String competitor2, Date eventDate, boolean isSettled, String winner) {
+		this.id = id;
 		this.eventCode = eventCode;
 		this.category = category;
 		this.competitor1 = competitor1;
@@ -23,6 +25,11 @@ public class Event implements EventInterface{
 		this.eventDate = eventDate;
 		this.isSettled = isSettled;
 		this.winner = winner;
+	}
+	
+	@Override
+	public long getId() {
+		return this.id;
 	}
 
 	@Override
@@ -51,7 +58,7 @@ public class Event implements EventInterface{
 	}
 
 	@Override
-	public Sport getCategory() {
+	public Sports getCategory() {
 		return category;
 	}
 

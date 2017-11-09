@@ -7,10 +7,15 @@ import com.lotus.mp2.utils.Result;
 
 
 public interface BetInterface {
+	public long getId();
+	
 	BigDecimal getStake();
+	
 	String getEventCode();
+	
 	String getpredicted();
-	Date getPlacementDate();
-	Result getResult();
-	void setResult(Result result);
+	
+	public Date getPlacementDate();
+	
+	public Result getBetResult();
 }
