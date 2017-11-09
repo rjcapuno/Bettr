@@ -11,6 +11,7 @@ import com.lotus.mp2.bet.TransactionInterface;
 import com.lotus.mp2.event.EventInterface;
 import com.lotus.mp2.user.User;
 import com.lotus.mp2.utils.DAOUtils;
+import com.lotus.mp2.utils.Result;
 import com.sun.jersey.spi.resource.Singleton;
 
 import static com.lotus.mp2.utils.Constants.*;
@@ -32,6 +33,7 @@ public class AdminDAO implements AdminDAOInterface{
 		return connection;
 	}
 	
+	@Override
 	public List<User> getUsersList() {
 		List<User> users = new LinkedList<>();
 		Connection connection = null;
@@ -61,6 +63,7 @@ public class AdminDAO implements AdminDAOInterface{
 		return users;
 	}
 	
+	@Override
 	public List<TransactionInterface> getBetList() {
 		List<TransactionInterface> transactions = new LinkedList<>();
 		Connection connection = null;
@@ -90,6 +93,7 @@ public class AdminDAO implements AdminDAOInterface{
 		return transactions;
 	}
 	
+	@Override
 	public List<TransactionInterface> getBetbyEventId(long eventId) {
 		List<TransactionInterface> transactions = new LinkedList<>();
 		Connection connection = null;
@@ -120,6 +124,7 @@ public class AdminDAO implements AdminDAOInterface{
 		return transactions;
 	}
 	
+	@Override
 	public List<TransactionInterface> getBetbyCustomerId(long customerId) {
 		List<TransactionInterface> transactions = new LinkedList<>();
 		Connection connection = null;
@@ -150,6 +155,7 @@ public class AdminDAO implements AdminDAOInterface{
 		return transactions;
 	}
 	
+	@Override
 	public boolean addUser(User user) {
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -188,6 +194,7 @@ public class AdminDAO implements AdminDAOInterface{
 		return true;
 	}
 	
+	@Override
 	public boolean addEvent(EventInterface event) {
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -219,6 +226,7 @@ public class AdminDAO implements AdminDAOInterface{
 		return true;
 	}
 	
+	@Override
 	public boolean updateResult(String outcome, String eventCode) {
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -245,6 +253,7 @@ public class AdminDAO implements AdminDAOInterface{
 		return true;
 	}
 	
+	@Override
 	public boolean updateBalance(BigDecimal balance, String username) {
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -254,6 +263,60 @@ public class AdminDAO implements AdminDAOInterface{
 			statement = connection.prepareStatement(UPDATE_BALANCE_QUERY);
 			statement.setBigDecimal	(1, balance);
 			statement.setString	(2, username.toLowerCase());
+			statement.executeUpdate();
+			connection.commit();
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean updateTransactionResult(long id, Result result) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		try {
+			connection = setUpConnection();
+			statement = connection.prepareStatement(UPDATE_TRANSACTION_RESULT_QUERY);
+			statement.setString	(1, result.toString());
+			statement.setLong(2, id);
+			statement.executeUpdate();
+			connection.commit();
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				connection.close();
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean updateEventIsSettled(long eventId) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		
+		try {
+			connection = setUpConnection();
+			statement = connection.prepareStatement(UPDATE_EVENT_ISSETTLED_QUERY);
+			statement.setBoolean(1, true);
+			statement.setLong(2, eventId);
 			statement.executeUpdate();
 			connection.commit();
 			

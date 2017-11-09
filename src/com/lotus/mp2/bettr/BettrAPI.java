@@ -20,7 +20,7 @@ public class BettrAPI {
 	
 	@Context
 	HttpServletRequest request;
-	
+
 	@Path("login")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

@@ -73,6 +73,7 @@ public class CustomerAPI {
 			InputValidator.isValidBetEventCode(eventCode);
 			InputValidator.isValidPredicted(predicted, eventCode);
 			InputValidator.isValidBetStake(stake, username);
+			InputValidator.isValidBetDate(Calendar.getInstance().getTime(), eventCode);
 			eventId = getEventId(eventCode);
 			checkHasBetOnEvent(eventCode, customerId);
 		} catch (AccessDeniedException e) {

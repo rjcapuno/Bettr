@@ -8,8 +8,13 @@ public final class Constants {
 	
 	public static final String DATE_FORMAT = "MM/dd/yyyy HH:mm";
 	
+	public static final long SYSTEM_SLEEP_TIME = 60000;
+	
 	public static final BigDecimal MIN_STAKE = new BigDecimal(10);
 	public static final BigDecimal MAX_STAKE = new BigDecimal(1000);
+	
+	public static final BigDecimal ZERO = new BigDecimal(0);
+	public static final BigDecimal WIN_MULTIPLIER = new BigDecimal(2);
 	
 	public static final String OK = "success: true";
 	public static final String FAIL = "success: false, error: ";

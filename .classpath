@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="target/classes" path="src">
-		<attributes>
-			<attribute name="optional" value="true"/>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/javax/servlet/javax.servlet-api/3.0.1/javax.servlet-api-3.0.1.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.0/commons-lang3-3.0.jar" sourcepath="M2_REPO/org/apache/commons/commons-lang3/3.0/commons-lang3-3.0-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/asm/asm/3.3.1/asm-3.3.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-bundle/1.19/jersey-bundle-1.19.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/json/json/20140107/json-20140107.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-server/1.19/jersey-server-1.19.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-core/1.19/jersey-core-1.19.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-mapper-asl/1.8.5/jackson-mapper-asl-1.8.5.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.8.5/jackson-core-asl-1.8.5.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/owlike/genson/0.99/genson-0.99.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/oracle/ojdbc/6/ojdbc-6.jar"/>
-	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.0"/>
-	<classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="src" path="src" including="**/*.java"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="var" path="M2_REPO/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/servlet/javax.servlet-api/3.0.1/javax.servlet-api-3.0.1.jar" sourcepath="M2_REPO/javax/servlet/javax.servlet-api/3.0.1/javax.servlet-api-3.0.1-sources.jar"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.0/commons-lang3-3.0.jar" sourcepath="M2_REPO/org/apache/commons/commons-lang3/3.0/commons-lang3-3.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/asm/asm/3.3.1/asm-3.3.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-bundle/1.19/jersey-bundle-1.19.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/json/json/20140107/json-20140107.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-server/1.19/jersey-server-1.19.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-core/1.19/jersey-core-1.19.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-mapper-asl/1.8.5/jackson-mapper-asl-1.8.5.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.8.5/jackson-core-asl-1.8.5.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/owlike/genson/0.99/genson-0.99.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/oracle/ojdbc/6/ojdbc-6.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-catalina/8.0.47/tomcat-catalina-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-servlet-api/8.0.47/tomcat-servlet-api-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-jsp-api/8.0.47/tomcat-jsp-api-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-el-api/8.0.47/tomcat-el-api-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-juli/8.0.47/tomcat-juli-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-annotations-api/8.0.47/tomcat-annotations-api-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-api/8.0.47/tomcat-api-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-jni/8.0.47/tomcat-jni-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-coyote/8.0.47/tomcat-coyote-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-util/8.0.47/tomcat-util-8.0.47.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/tomcat/tomcat-util-scan/8.0.47/tomcat-util-scan-8.0.47.jar"/>
 </classpath>

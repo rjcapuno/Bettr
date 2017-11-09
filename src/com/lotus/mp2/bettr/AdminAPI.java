@@ -265,7 +265,9 @@ public class AdminAPI {
 			InputValidator.isNotNull(outcome);
 			InputValidator.isNotNull(eventCode);
 			InputValidator.doesEventCodeExists(eventCode);
-			InputValidator.isValidPredicted(outcome, eventCode);
+			if(!outcome.equalsIgnoreCase("draw")) {
+				InputValidator.isValidPredicted(outcome, eventCode);
+			}
 		} catch (AccessDeniedException e) {
 			return Response.status(400).entity(FORBIDDEN).build();
 		} catch (InvalidInputException e) {

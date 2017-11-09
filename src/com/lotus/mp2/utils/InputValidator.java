@@ -281,5 +281,14 @@ public class InputValidator {
 		
 		return true;
 	}
-
+	
+	public static boolean isValidBetDate(Date date, String eventCode) throws InvalidInputException {
+		List<EventInterface> events = userDAO.getEventByEventCode(eventCode);
+		
+		if(date.after(events.get(FIRST_INDEX).getEventDate())) {
+			throw new InvalidInputException("Cannot bet on starting events");
+		}
+		
+		return true;
+	}
 }

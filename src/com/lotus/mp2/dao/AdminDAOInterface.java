@@ -1,13 +1,12 @@
 package com.lotus.mp2.dao;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import com.lotus.mp2.bet.TransactionInterface;
 import com.lotus.mp2.event.EventInterface;
 import com.lotus.mp2.user.User;
+import com.lotus.mp2.utils.Result;
 
 public interface AdminDAOInterface {
 		
@@ -26,5 +25,9 @@ public interface AdminDAOInterface {
 		public boolean updateResult(String outcome, String eventCode);
 		
 		public boolean updateBalance(BigDecimal balance, String username);
+		
+		public boolean updateTransactionResult(long id, Result result);
+		
+		public boolean updateEventIsSettled(long eventId);
 
 }

@@ -15,10 +15,12 @@ public class Queries {
 	public static final String GET_TRANSACTION_BY_ID_QUERY = "SELECT * FROM transactions WHERE LOWER(transactionid) = ?";
 	public static final String ADD_TRANSACTION_QUERY = "INSERT INTO transactions(id, transactionid, customerid, eventid, placementdate, stake, "
 			+ "predicted, result) VALUES(transactions_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
+	public static final String UPDATE_TRANSACTION_RESULT_QUERY = "UPDATE transactions SET result = ? WHERE id = ?";
 	
 	public static final String GET_ALL_EVENTS_QUERY = "SELECT * from events";
 	public static final String GET_EVENT_BY_EVENT_ID_QUERY = "SELECT * from events WHERE id = ?";
 	public static final String GET_EVENT_BY_SPORT_QUERY = "SELECT * from events WHERE LOWER(sport) = ?";
+	public static final String UPDATE_EVENT_ISSETTLED_QUERY = "UPDATE events SET issettled = ? WHERE id = ?";
 	
 	
 	public static final String UPDATE_RESULT_QUERY = "UPDATE events SET winner = ? WHERE LOWER(eventcode) = ?";
